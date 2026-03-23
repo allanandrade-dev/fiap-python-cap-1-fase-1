@@ -1,3 +1,6 @@
+import math
+import pandas as pd
+
 def exibir_menu():
     print("\n" + "=" * 40)
     print("   FARMTECH SOLUTIONS - MENU PRINCIPAL   ")
@@ -6,11 +9,22 @@ def exibir_menu():
     print("2. Saída de dados (Listar Registros)")
     print("3. Atualização de dados (Editar Registro)")
     print("4. Deleção de dados (Remover Registro)")
-    print("5. Sair do programa")
+    print("5. Exportar Relatório")
+    print("6. Sair do programa")
     print("=" * 40)
 
+
+def gerar_relatorio(dados_lavoura):
+    df = pd.DataFrame(dados_lavoura)
+    df.to_csv(
+        'relatorio_lavoura.csv',
+        index=False,
+        sep=',',
+        encoding='utf-8'
+    )
+    print("Relatório gerado com sucesso! O arquivo foi salvo como 'relatorio_lavoura.csv'.")
+
 def run():
-    import math
 
     # Nosso vetor principal que armazenará os dados dos plantios
     # Cada registro será um dicionário dentro desta lista
@@ -18,17 +32,17 @@ def run():
 
     while True:
         exibir_menu()
-        opcao = input("Escolha uma opção (1-5): ")
+        opcao = int(input("Escolha uma opção (1-5): "))
 
-        if opcao == '1':
+        if opcao == 1:
             print("\n--- Entrada de Dados ---")
             print("Selecione a cultura:")
             print("1. Cana-de-açúcar (Área Retangular)")
             print("2. Milho (Pivô Central Circular)")
 
-            tipo_cultura = input("Opção (1 ou 2): ")
+            tipo_cultura = int(input("Opção (1 ou 2): "))
 
-            if tipo_cultura == '1':
+            if tipo_cultura == 1:
                 cultura = "Cana-de-açúcar"
                 largura = float(input("Digite a largura da área (em metros): "))
                 comprimento = float(input("Digite o comprimento da área (em metros): "))
@@ -41,7 +55,7 @@ def run():
                 unidade = "kg"
                 nome_insumo = "Adubo NPK"
 
-            elif tipo_cultura == '2':
+            elif tipo_cultura == 2:
                 cultura = "Milho"
                 raio = float(input("Digite o raio do pivô central (em metros): "))
                 area_m2 = math.pi * (raio ** 2)
@@ -68,7 +82,7 @@ def run():
             registros_lavoura.append(novo_dado)
             print("-> Dados registrados com sucesso!")
 
-        elif opcao == '2':
+        elif opcao == 2:
             print("\n--- Saída de Dados ---")
             if len(registros_lavoura) == 0:
                 print("Nenhum dado registrado ainda.")
@@ -77,7 +91,7 @@ def run():
                     print(
                         f"Índice [{i}] | Cultura: {registro['cultura']} | Área: {registro['area_m2']} m² | {registro['insumo']}: {registro['total_insumo']} {registro['unidade']}")
 
-        elif opcao == '3':
+        elif opcao == 3:
             print("\n--- Atualização de Dados ---")
             if len(registros_lavoura) == 0:
                 print("Nenhum dado para atualizar.")
@@ -99,7 +113,7 @@ def run():
             except ValueError:
                 print("Por favor, digite um número inteiro válido.")
 
-        elif opcao == '4':
+        elif opcao == 4:
             print("\n--- Deleção de Dados ---")
             if len(registros_lavoura) == 0:
                 print("Nenhum dado para deletar.")
@@ -115,7 +129,11 @@ def run():
             except ValueError:
                 print("Por favor, digite um número inteiro válido.")
 
-        elif opcao == '5':
+        elif opcao == 5:
+            gerar_relatorio(registros_lavoura)
+            break
+
+        elif opcao == 6:
             print("\nEncerrando o sistema FarmTech Solutions. Até logo e bom plantio!")
             break
 
